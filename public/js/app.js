@@ -53785,6 +53785,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -87595,10 +87598,12 @@ var render = function() {
                 [
                   _c("v-select", {
                     attrs: {
+                      placeholder: "Seleccionar Sección",
+                      hint: "Pick your favorite states",
+                      "persistent-hint": "",
                       onChange: _vm.cambiaEdicion,
                       options: _vm.arraySeccion,
-                      label: "descSeccion",
-                      placeholder: "Seleccionar Sección"
+                      label: "descSeccion"
                     },
                     model: {
                       value: _vm.codSeccion,
@@ -87649,198 +87654,6 @@ var render = function() {
                   ]
                 )
               ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.vista > 0
-            ? _c(
-                "div",
-                [
-                  _c(
-                    "v-container",
-                    { attrs: { fluid: "", "grid-list-xl": "" } },
-                    [
-                      _c(
-                        "v-layout",
-                        { attrs: { row: "", "justify-space-between": "" } },
-                        _vm._l(_vm.arrayCategoria, function(categoria) {
-                          return _c(
-                            "div",
-                            { key: categoria.codigo },
-                            [
-                              _c("b-row", { attrs: { "align-h": "center" } }, [
-                                _c(
-                                  "div",
-                                  [
-                                    _vm._v(
-                                      "\n                                              " +
-                                        _vm._s(
-                                          _vm.recorrida(
-                                            categoria.codigo,
-                                            _vm.pagination.current_page
-                                          )
-                                        ) +
-                                        "\n                                              "
-                                    ),
-                                    _c(
-                                      "b-col",
-                                      [
-                                        _c(
-                                          "b-card-group",
-                                          { attrs: { deck: "" } },
-                                          [
-                                            _c(
-                                              "b-card",
-                                              {
-                                                attrs: {
-                                                  title:
-                                                    "categoria.descripcion",
-                                                  "header-tag": "header",
-                                                  "footer-tag": "footer"
-                                                }
-                                              },
-                                              [
-                                                _c("h6", {
-                                                  staticClass: "mb-0",
-                                                  attrs: { slot: "header" },
-                                                  domProps: {
-                                                    textContent: _vm._s(
-                                                      categoria.descripcion
-                                                    )
-                                                  },
-                                                  slot: "header"
-                                                }),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "em",
-                                                  {
-                                                    attrs: { slot: "footer" },
-                                                    slot: "footer"
-                                                  },
-                                                  [_vm._v("Footer Slot")]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "p",
-                                                  { staticClass: "card-text" },
-                                                  [
-                                                    _vm._v(
-                                                      "Header and footers usas"
-                                                    )
-                                                  ]
-                                                ),
-                                                _vm._v(" "),
-                                                _c(
-                                                  "v-container",
-                                                  {
-                                                    attrs: {
-                                                      "grid-list-md": "",
-                                                      "text-xs-center": ""
-                                                    }
-                                                  },
-                                                  [
-                                                    _c(
-                                                      "v-layout",
-                                                      {
-                                                        attrs: {
-                                                          row: "",
-                                                          wrap: ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "b-container",
-                                                          {
-                                                            staticClass:
-                                                              "bv-example-row bg-info"
-                                                          },
-                                                          [
-                                                            _c(
-                                                              "b-row",
-                                                              _vm._l(
-                                                                _vm.arrayKits,
-                                                                function(kit) {
-                                                                  return _c(
-                                                                    "div",
-                                                                    {
-                                                                      key:
-                                                                        kit.codigoKits
-                                                                    },
-                                                                    [
-                                                                      _c(
-                                                                        "b-col",
-                                                                        {
-                                                                          domProps: {
-                                                                            textContent: _vm._s(
-                                                                              kit.codigoKits
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "b-col",
-                                                                        {
-                                                                          domProps: {
-                                                                            textContent: _vm._s(
-                                                                              kit.descripcionKits
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      ),
-                                                                      _vm._v(
-                                                                        " "
-                                                                      ),
-                                                                      _c(
-                                                                        "b-col",
-                                                                        {
-                                                                          domProps: {
-                                                                            textContent: _vm._s(
-                                                                              kit.lineaKit
-                                                                            )
-                                                                          }
-                                                                        }
-                                                                      )
-                                                                    ],
-                                                                    1
-                                                                  )
-                                                                }
-                                                              )
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              ],
-                                              1
-                                            )
-                                          ],
-                                          1
-                                        )
-                                      ],
-                                      1
-                                    )
-                                  ],
-                                  1
-                                )
-                              ])
-                            ],
-                            1
-                          )
-                        })
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
             : _vm._e(),
           _vm._v(" "),
           _c("nav", [

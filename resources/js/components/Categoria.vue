@@ -23,11 +23,14 @@
                         <div class="col-md-6">
                             <div class="input-group">
                               <v-select
+                               placeholder="Seleccionar Sección"
+                                hint="Pick your favorite states"
+                                  persistent-hint
                                 :onChange="cambiaEdicion"
                                 :options="arraySeccion"
                                 v-model="codSeccion" 
                                 label="descSeccion"
-                                placeholder="Seleccionar Sección"
+                                
                               ></v-select>
                                                         
                           
@@ -64,7 +67,7 @@
                         </tbody>
                         </table>
                      </div>
-                     <div v-if="vista > 0">
+                    <!--  <div v-if="vista > 0">
                        
                              <v-container fluid grid-list-xl >
                                  <v-layout row justify-space-between>
@@ -108,7 +111,7 @@
                              
                          
                         
-                     </div>
+                     </div> -->
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page > 1">
