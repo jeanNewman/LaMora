@@ -8,17 +8,17 @@
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
         <div class="container-fluid">
-            
+
             <!-- Ejemplo de tabla Listado -->
             <div class="card">
                 <div class=" d-flex align-items-center nav-item card-header">
-                    <div class="mr-auto  fa fa-align-justify  "><span style="padding-left:10px">Categorías</span> </div> 
+                    <div class="mr-auto  fa fa-align-justify  "><span style="padding-left:10px">Categorías</span> </div>
                     <i @click.prevent="vista=0" class="p-2 fa fa-list fa-lg nav-link" ></i>
                     <i @click.prevent="vista=1" class="p-2 fa fa-th-large fa-lg nav-link"></i>
                 </div>
-                
+
                 <div class="card-body">
-                    
+
                     <div class="form-group row">
                         <div class="col-md-6">
                             <div class="input-group">
@@ -28,16 +28,16 @@
                                   persistent-hint
                                 :onChange="cambiaEdicion"
                                 :options="arraySeccion"
-                                v-model="codSeccion" 
+                                v-model="codSeccion"
                                 label="descSeccion"
-                                
+
                               ></v-select>
-                                                        
-                          
+
+
                             </div>
                         </div>
                     </div>
-             
+
                     <div v-if="vista == 0">
                         <table class="table table-bordered table-striped table-sm">
                         <thead>
@@ -51,7 +51,7 @@
                         <tbody>
                             <tr v-for="categoria in arrayCategoria" :key="categoria.codigo">
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalNuevo">
+                                    <button type="button" @click="abrirModal('categoria','mostrar',categoria);listarCards(categoria.codigo)" class="btn btn-warning btn-sm" >
                                       <i class="icon-pencil"></i>
                                     </button> &nbsp;
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalEliminar">
@@ -61,22 +61,24 @@
                                 <td v-text="categoria.codigo"></td>
                                 <td v-text="categoria.descripcion"></td>
                                 <td v-text="categoria.costo"></td>
-                                
+
                             </tr>
-                          
+
                         </tbody>
                         </table>
                      </div>
-                    <!--  <div v-if="vista > 0">
-                       
+                      <div v-if="vista > 0">
+
                              <v-container fluid grid-list-xl >
                                  <v-layout row justify-space-between>
-                                  <div v-for="categoria in arrayCategoria" :key="categoria.codigo"  >  
+                                  <div v-for="categoria in arrayCategoria" :key="categoria.codigo"  >
+                                      {{  recorrida(categoria.codigo,pagination.current_page) }}
+                                      <div v-for="kit in arrayKits" :key="kit.codigoKits"  >
                                         <b-row align-h="center">
-                                           
+
                                             <div  >
-                                                {{  recorrida(categoria.codigo,pagination.current_page) }}
-                                                <b-col>  
+
+                                                <b-col>
                                                 <b-card-group deck>
                                                 <b-card title="categoria.descripcion"
                                                             header-tag="header"
@@ -86,32 +88,33 @@
                                                         <em slot="footer">Footer Slot</em>
                                                         <p class="card-text">Header and footers usas</p>
                                                          <v-container grid-list-md text-xs-center>
-                                                          <v-layout row wrap> 
+                                                          <v-layout row wrap>
                                                                   <b-container class="bv-example-row bg-info">
                                                                     <b-row>
-                                                                        <div v-for="kit in arrayKits" :key="kit.codigoKits"  >
+
                                                                             <b-col v-text="kit.codigoKits"></b-col>
                                                                             <b-col v-text="kit.descripcionKits"></b-col>
                                                                             <b-col v-text="kit.lineaKit"></b-col>
-                                                                        </div>
+
                                                                     </b-row>
                                                                 </b-container>
                                                           </v-layout>
-                                                         </v-container>                            
-                                                       
+                                                         </v-container>
+
                                                     </b-card>
                                                 </b-card-group>
                                                 </b-col>
-                                                </div>  
-                                                                         
+                                                </div>
+
                                             </b-row>
-                                         </div>   
+                                            </div>
+                                         </div>
                                  </v-layout>
-                               </v-container>   
-                             
-                         
-                        
-                     </div> -->
+                               </v-container>
+
+
+
+                     </div>
                     <nav>
                         <ul class="pagination">
                             <li class="page-item" v-if="pagination.current_page > 1">
@@ -123,7 +126,7 @@
                             <li class="page-item" v-for="page in pagesNumber" :key="page"  :class="[page == isActived ? 'active' : '']">
                                 <a class="page-link" href="#"  @click.prevent="cambiarPagina(page)" v-text="page"></a>
                             </li>
-                          
+
                             <li class="page-item" v-if="pagination.current_page < pagination.last_page">
                                 <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
                             </li>
@@ -137,34 +140,47 @@
             <!-- Fin ejemplo de tabla Listado -->
         </div>
         <!--Inicio del modal agregar/actualizar-->
-        <div class="modal fade" id="modalNuevo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+        <div class="modal fade"  tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-primary modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Agregar categoría</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h4 class="modal-title" v-text="tituloModal"></h4>
+                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
                           <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">
-                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
-                                <div class="col-md-9">
-                                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre de categoría">
-                                    <span class="help-block">(*) Ingrese el nombre de la categoría</span>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
-                                <div class="col-md-9">
-                                    <input type="email" id="descripcion" name="descripcion" class="form-control" placeholder="Enter Email">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <div class="modal-body">
+
+                <table class="table table-bordered table-striped table-sm">
+                    <thead>
+                        <tr>
+                            <th>Linea</th>
+                            <th>Kit</th>
+                            <th>Descripción</th>
+                            <th>Medida</th>
+                            <th>Precio</th>
+                            <th>Total</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="kit in arrayKits" :key="kit.codigoKits">
+
+                            <td v-text="kit.linea"></td>
+                            <td v-text="kit.codigo_kit"></td>
+                            <td v-text="kit.descripcion_kit"></td>
+                            <td v-text="kit.unidadeskit"></td>
+                            <td v-text="kit.precio"></td>
+                            <td v-text="kit.totallinea"></td>
+
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
                         <button type="button" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>
@@ -196,7 +212,7 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- Fin del modal Eliminar -->
-      
+
     </main>
     <!-- /Fin del contenido principal -->
 </template>
@@ -220,21 +236,23 @@
             arrayCategoria:[],
             valorSelect:'',
             pagination : {
-                'total' : 0,         
-                'current_page' : 0,  
-                'per_page' : 0,     
-                'last_page' : 0,     
-                'from' : 0,         
-                'to'   : 0 ,        
+                'total' : 0,
+                'current_page' : 0,
+                'per_page' : 0,
+                'last_page' : 0,
+                'from' : 0,
+                'to'   : 0 ,
             },
             offset: 3,
             ///////
             codSeccion:'',
             descSeccion:'',
             arraySeccion:[],
-            codigoKits:'',
-            descripcionKits:'',
-            lineaKit:'',
+            codigo_kits:'',
+            descripcion_kits:'',
+            linea:'',
+            modal:0,
+            tituloModal:'',
             arrayKits:[]
 
 
@@ -251,7 +269,7 @@
                 if(!this.pagination.to){
                     return[];
                 }
-                
+
                 var from = this.pagination.current_page - this.offset;
                 if(from < 1) {
                     from = 1;
@@ -291,31 +309,31 @@
                             //me.arrayCategoria[x].costo = me.arrayCategoria[x].costo.toFixed(2);x++;
                             me.arrayCategoria[x].costo = (parseFloat( me.arrayCategoria[x].costo).toFixed(2)).toString();x++;
                         };
-                          
+
                     })
                     .catch(function (error) {
                         // handle error
                         console.log(error);
                     });
-                   
+
             },
-               listarCards(val,page){
+               listarCards(val){
                 let me = this;
-                let valor = val == undefined?'':'&kit='+val
-                var url = '/admin/categoria/listarCards?page=' + page+valor;
+                let valor = val == undefined?'':'kit='+val
+                var url = '/admin/categoria/listarCards?'+valor;
                 axios.get(url).then(function (response) {
-                     
+
                         var respuesta = response.data;
-                       
-                        me.arrayKits= respuesta.tarjetas.data;
-                        me.pagination = respuesta.pagination;
-                     
+
+                        me.arrayKits= respuesta;
+
+
                     })
                     .catch(function (error) {
                         // handle error
                         console.log(error);
                     });
-                   
+
             },
             cambiaEdicion(val,page){
                 let me = this;
@@ -325,13 +343,13 @@
                 else
                 me.listarCards(me.valorSelect,page);
             },
-            recorrida(val,page){
+            recorrida(val){
               let me = this;
-              me.codigoKits = val
-              me.listarCards(me.codigoKits,page);
-             
+
+              me.listarCards(me.codigoKits);
+
             },
-           
+
             cambiarPagina(page){
                 let me = this;
                 me.pagination.current_page = page;
@@ -339,12 +357,45 @@
                 me.listarCategoria(me.valorSelect,page);
                 else
                 me.listarCards(me.valorSelect,page);
+            },
+            cerrarModal(){
+                this.modal = 0;
+                this.tituloModal = '';
+            },
+            abrirModal(modelo,accion,data = []){
+                switch(modelo){
+                    case "categoria":
+                     {
+                         switch(accion){
+                             case 'mostrar':
+                             {
+                                 this.modal = 1;
+                                 this.tituloModal = 'Receta';
+                                 this.codigo = data['codigo'];
+                                 //this.listarCards(this.codigo);
+                                 break;
+                             }
+                         }
+                     }
+                }
             }
         },
         mounted() {
            this.listarCategoria()
 
-           
+
         }
     }
 </script>
+<style>
+ .modal-content{
+     width: 100% !important;
+     position: absolute !important;
+ }
+ .mostrar{
+     display: list-item !important;
+     opacity: 1 !important;
+     position: absolute !important;
+     background-color: #3c29297a !important;
+ }
+</style>

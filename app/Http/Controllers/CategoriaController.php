@@ -20,8 +20,8 @@ class CategoriaController extends Controller
         //if (!$request->ajax()) return redirect('/');
         //  $articulo = new Articulo;
       //  $articulo->setConnection('sqlsrv');
-       // $queryArticulos = DB::table('articulos')->first();   
-       $filtro = $request->filtro; 
+       // $queryArticulos = DB::table('articulos')->first();
+       $filtro = $request->filtro;
        if($filtro == ''){
            $query1 = 'like';
            $query2 = '%%';
@@ -46,9 +46,9 @@ class CategoriaController extends Controller
         ->where('numdpto','=',1)
         ->select('numseccion as codSeccion','descripcion as descSeccion')
         ->get();
-      
+
          return [
-            
+
           'pagination'=>[
             'total'         => $categorias->total(),
             'current_page'  => $categorias->currentPage(),
@@ -57,16 +57,16 @@ class CategoriaController extends Controller
             'from'          => $categorias->firstItem(),
             'to'            => $categorias->lastItem(),
           ],
-          'categorias' => $categorias, 
+          'categorias' => $categorias,
           'secciones' => $secciones
-        ]; 
-        
+        ];
+
         //->paginate(10);
-        
+
        // select('select a.CODARTICULO as codigo,a.DESCRIPCION as descripcion, ROUND(b.ultimocoste,2,0) as costo from articulos as a inner join articuloslin as b on a.codarticulo = b.codarticulo   where dpto = ? ',[1],'and a.descatalogado = ? ',['F'])->paginate(10);
                                                         //where a.dpto = ? and a.DESCATALOGADO = ? and  a.ESKIT = ?',[1],['F'],['T']); // = Categoria::all();
        // dd($categorias);
-       
+
     }
 
     public function listaFiltroRecetas(Request $request){
@@ -80,35 +80,23 @@ class CategoriaController extends Controller
         ->where('a.eskit','=','T')
         ->select('a.codarticulo as codigo','a.descripcion as descripcion','b.ultimocoste as costo')
         ->get();
-       
+
         return ['recetas' => $recetas];
     }
-   
+
     public function listarCards(Request $request){
-        
+
         $kit = $request->kit;
         $cards = DB::connection('sqlsrv')
         ->table('kits')
         ->where('codarticulo','=',$kit)
-        ->select('lineakit as linea','codartkit as codigo_kit','descripciokit as descripcion_kit')
-        ->paginate(10);
-        
-         
-        return [
-            
-            'pagination'=>[
-              'total'         => $cards->total(),
-              'current_page'  => $cards->currentPage(),
-              'per_page'      => $cards->perPage(),
-              'last_page'     => $cards->lastPage(),
-              'from'          => $cards->firstItem(),
-              'to'            => $cards->lastItem(),
-            ],
-            'tarjetas' => $cards, 
-            
-          ]; 
+        ->select('lineakit as linea','codartkit as codigo_kit','descripciokit as descripcion_kit','unidades as unidadeskit','preciounidad as precio','totallinea as totallinea')
+        ->get();
+
+
+        return $cards;
     }
-   
+
    /**
      * Store a newly created resource in storage.
      *
@@ -123,12 +111,12 @@ class CategoriaController extends Controller
         $categoria->descripcion = $request->descripcion;
         $categoria->condicion = 1;
         $categoria->save();
-         
+
     }
 
-   
 
-    
+
+
     /**
      * Update the specified resource in storage.
      *
